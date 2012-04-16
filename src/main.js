@@ -1,26 +1,40 @@
 require(['lib/AStarFloodFill',
-		'lib/underscore-min'],
+        'lib/underscore-min'],
 function(AStarFloodFill) {
 
+    /*
+     * crappy setup - all of this is for the rendering */
     $('body').click(function(e){
-    	var $target = $(e.target),
-    		x = $target.data('x'),
-    		y = $target.data('y');
+        var $target = $(e.target),
+            x = $target.data('x'),
+            y = $target.data('y');
 
-    	if(_.isNumber(x)&&_.isNumber(y)){
-    		AStarFloodFill.setPeak({x:x,y:y});
-    	}
+        if(_.isNumber(x) && _.isNumber(y) && $target.text()!=='Infinity'){
+            AStarFloodFill.setPeak({x:x,y:y});
+        }
     });
 
-    $('button').click(function(){
+    $('#stop').click(function(){
         AStarFloodFill.stop();
-        $(this).remove();
     });
+
+    $('#start').click(function(){
+        AStarFloodFill.startFill();
+    });
+
+    // just does some fading in and out in order to illustrate any blocking of the frame
+    function pointlessMove(){
+        $('img').fadeOut(300,function(){
+            $('img').fadeIn(300,function(){
+                pointlessMove();
+            });
+        });
+    }
 
     function doneAll(){
 
-		var html = '',
-			wmap = AStarFloodFill.getWeightmap(),
+        var html = '',
+            wmap = AStarFloodFill.getWeightmap(),
             cols = map[0].length,
             rows = map.length,
             i,j, cell;
@@ -32,17 +46,16 @@ function(AStarFloodFill) {
             }
         }
 
-		$('#map').html(html);
+        $('#map').html(html);
 console.log('done');
-	}
-
-    function fasterDone(){
-        console.log('done');//AStarFloodFill.getWeightmap());
     }
+    
+    pointlessMove();
 
 
 
 
+    /* actual AStarFloodFill usage here */
     var map = [
                 ['w','w','w','w','u','w','w','w','w','w','w','w'],
                 ['w','u','w','u','u','w','u','u','u','w','w','w'],
@@ -51,11 +64,15 @@ console.log('done');
                 ['w','w','w','u','w','w','w','w','u','w','w','w'],
                 ['w','w','w','u','w','u','w','w','u','w','w','w'],
                 ['u','u','w','w','w','u','w','u','u','u','u','w'],
-                ['w','w','w','w','w','u','w','w','w','w','w','w'],
+                ['w','w','w','w','w','w','w','w','w','w','w','w'],
                 ['w','u','u','w','u','u','u','u','w','u','u','w'],
                 ['w','w','u','w','w','u','w','w','w','u','w','w'],
-                ['w','w','u','u','w','u','w','w','w','w','w','w'],
-                ['w','w','u','u','w','u','w','w','w','w','w','w']
+                ['w','w','u','w','w','u','w','w','w','w','w','w'],
+                ['w','w','u','w','w','u','w','w','w','w','u','w'],
+                ['w','w','u','u','w','u','w','w','u','u','u','w'],
+                ['w','w','w','u','w','w','w','w','u','w','w','w'],
+                ['w','w','w','w','w','u','w','w','u','w','w','w'],
+                ['w','w','u','u','u','u','u','u','u','w','w','w']
             ];
 
     AStarFloodFill.start({
@@ -64,16 +81,5 @@ console.log('done');
         interval: 5,
         doneAll: doneAll
     });
-
-
-    // just does some fading in and out in order to illustrate any blocking of the frame
-    function pointlessMove(){
-        $('img').fadeOut(500,function(){
-            $('img').fadeIn(500,function(){
-                pointlessMove();
-            });
-        });
-    }
-    pointlessMove();
 
 });

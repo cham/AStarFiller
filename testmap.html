@@ -31,7 +31,7 @@
 	background: #ffffff;
 }
 #map div.weight-1 {
-	background: #ddffdd;
+	background: cyan;
 }
 #map div.weight-2 {
 	background: #bbffbb;
@@ -91,7 +91,18 @@
   </style>
 </head>
 <body>
-  <img src="http://www.nonstopgifs.com/animated-gifs/games/games-animated-gif-003.gif" /><button>Stop</button>
+  <h1>AStar Flood Filler</h1>
+  <p>
+    Lighter = closer. Filling 1 tile every 5ms.
+  </p>
+  <p>
+    Use sonic as a reference for blocking, he should look the same regardless of the filler running.
+  </p>
+
+  <img src="http://www.nonstopgifs.com/animated-gifs/games/games-animated-gif-003.gif" />
+  <button id="stop">Stop</button>
+  <button id="start">Start</button>
+  
   <div id="map"></div>
 </body>
 </html>
