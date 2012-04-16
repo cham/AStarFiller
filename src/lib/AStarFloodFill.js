@@ -1,6 +1,6 @@
 /**
 * AStarFloodFill
-* Fork of Matthew Trost's A-Star Pathfinding Algorithm by D Neame
+* Fork of Matthew Trost's A-Star Pathfinding Algorithm by D Neame @cham
 * Adds delayed flood filling support
 *
 * @license Creative Commons Attribution-ShareAlike 3.0 Unported License
@@ -20,7 +20,10 @@ map format 2D Array:
 	["s", "w", "u", "w", "w"],  
 	["u", "u", "u", "w", "w"] ]
 
-heuristic:
+
+Following are set in the returned object:
+
+heuristic
 	"manhattan" – the speedy Manhattan method, which adds up the x and y distance
 	"diagonal" – uses a diagonal line, plus any remaining x/y distance
 	"euclidean" – The familiar, elementary distance formula, accurate but slow
@@ -30,15 +33,13 @@ cutCorners
 	true – corners may be cut (i.e., diagonal movement is allowed)
 	false – corners may not be cut
 
-returns an array of NodeCoordinate objects format [{row:Number,col:Number},...] - NodeCoordinate approximate to coords object, substitute row with x and col with y
-		or null
-
-	to find movement, check array returned greater than 1
-
-  **/
+**/
 define(function(){
 	'use strict';
 
+	/*
+	 * original astar source
+	 */
 	function astar (map, heuristic, cutCorners) {
 		var listOpen = [];
 		var listClosed = [];
@@ -235,6 +236,11 @@ define(function(){
 		return ret;
 	}
 
+
+
+	/*
+	 * flood filler by D Neame @cham
+	 */
 	return {
 		
 		heuristic: 'manhattan',
