@@ -364,15 +364,6 @@ define(function(){
 			return astarres;
 		},
 
-		getPathLength: function(coords){
-			if( !this.walkableTile(coords) ){
-				return Infinity;
-			}else if(this.peakMatches(coords)){
-				return 0;
-			}
-			return this.getPath(coords).length-1;
-		},
-
 		fillPathLength: function(coords){
 			var astarPath, pathlen, self = this,
 				x = coords.x,
@@ -394,6 +385,43 @@ define(function(){
 				self.weightmap[item.row][item.col] = pathlen - i;
 				self.cached[item.row][item.col] = true;
 			});
+		},
+
+		lowestNeighborTo: function(coords){
+			var map = this.getWeightmap(),
+				bbox = {
+					'top': coords.y-1 < 0 ? 0 : coords.y-1,
+					'right': coords.x+1 > map[0].length ? map[0].length : coords.x+1,
+					'bottom': coords.y+1 > map.length ? map.length : coords.y+1,
+					'left': coords.x-1 < 0 ? 0 : coords.x-1
+				},
+				lowval = Infinity,
+				lowest = {x:0,y:0},
+				topslice=[],midslice=[],bottomslice=[];
+
+			topslice = (map.slice(bbox.top,bbox.top+1)[0] || []).slice(bbox.left,bbox.right+1);
+			if(coords.y!==bbox.top){
+				midslice = (map.slice(coords.y,coords.y+1)[0] || []).slice(bbox.left,bbox.right+1);
+			}
+			bottomslice = (map.slice(bbox.bottom,bbox.bottom+1)[0] || []).slice(bbox.left,bbox.right+1);
+
+			_(topslice).each(function(item,i){
+				if(item>lowval){ return; }
+				lowval = item;
+				lowest = {x:bbox.left+i,y:bbox.top};
+			});
+			_(midslice).each(function(item,i){
+				if(item>lowval){ return; }
+				lowval = item;
+				lowest = {x:bbox.left+i,y:bbox.top+1};
+			});
+			_(bottomslice).each(function(item,i){
+				if(item>lowval){ return; }
+				lowval = item;
+				lowest = {x:bbox.left+i,y:bbox.bottom};
+			});
+
+		  return lowest;
 		},
 
 		getWeightmap: function(){
