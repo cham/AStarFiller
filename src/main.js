@@ -94,7 +94,7 @@ function(AStarFloodFill) {
     AStarFloodFill.start({
         map: map,
         peak: {x:7,y:7},
-        interval: 15,
+        interval: 10,
         doneAll: function(){
 
             var html = '',
